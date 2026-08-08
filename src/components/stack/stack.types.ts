@@ -4,7 +4,7 @@ export interface CardRotateProps{
     children: ReactNode;
     onSendToBack: () => void;
     sensitivity: number;
-    disableDrag?:false
+    disableDrag?:boolean
 }
 
 export interface AnimationConfig{
@@ -16,7 +16,7 @@ export interface StackProps{
     randomRotation?: boolean;
     sensitivity?: number;
     sendToBackOnClick?: boolean;
-    card?: ReactNode[];
+    cards?: ReactNode[];
     animationConfig?: AnimationConfig;
     autoplay?: boolean;
     autoplayDelay?: number;
