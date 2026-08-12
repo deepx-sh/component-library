@@ -1,4 +1,4 @@
-import { Stack } from "./components";
+import { Stack, TiltedCard } from "./components";
 
 
 
@@ -10,12 +10,30 @@ const App = () => {
               <p className="text-slate-400 mt-2">Interactive UI components showcase</p>
           </header>
 
-          <section className="flex flex-col items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-16">
+              <section className="flex flex-col items-center gap-4">
               <h2 className="text-xl font-semibold">Stack Component</h2>
               <div className="w-52 h-52">
                   <Stack sendToBackOnClick autoplay pauseOnHover/>
               </div>
-          </section>
+              </section>
+              
+              <section className="flex flex-col items-center gap-4">
+                  <h2 className="text-xl font-semibold">Tilted Card Component</h2>
+                  <TiltedCard
+                      imageSrc="https://images.unsplash.com/photo-1517230878791-4d28214057c2?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                      altText="Madison Beer"
+                      captionText="Madison Beer"
+                      containerHeight="200px"
+                      containerWidth="200px"
+                      imageHeight="200px"
+                      imageWidth="200px"
+                      rotateAmplitude={12}
+                      scaleOnHover={1.05}
+                      showTooltip={true}
+                  />
+              </section>
+          </div>
     </main>
   )
 }
