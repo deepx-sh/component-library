@@ -1,4 +1,4 @@
-import { Stack, TiltedCard } from "./components";
+import { Stack, TiltedCard ,StarBorder} from "./components";
 
 
 
@@ -32,6 +32,19 @@ const App = () => {
                       scaleOnHover={1.05}
                       showTooltip={true}
                   />
+              </section>
+
+              <section className="flex flex-col items-center gap-4">
+                  <h2 className="text-xl font-semibold">Star Border</h2>
+                  <div className="flex flex-col gap-4">
+                      <StarBorder color="#a855f7" speed="5s" >
+                          Hover Me
+                      </StarBorder>
+
+                      <StarBorder color="#38bdf8" speed="3s">
+                          Fast Speed
+                      </StarBorder>
+                  </div>
               </section>
           </div>
     </main>
