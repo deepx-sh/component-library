@@ -21,21 +21,21 @@ export default function StarBorder<T extends ElementType = 'button'>({
             <div
                 className="absolute w-[300%] h-[50%] opacity-70 -bottom-2.75 right-[-250%] rounded-full animate-star-movement-bottom z-0"
                 style={{
-                    background: `radial-gradient(circle,${color} 0%,transparent 10%),radia-gradient(circle,${color} 10%,transparent 20%),radial-gradient(circle,${color} 20%,transparent 40%)`,
+                    background: `radial-gradient(circle,${color} 0%,transparent 10%),radial-gradient(circle,${color} 10%,transparent 20%),radial-gradient(circle,${color} 20%,transparent 40%)`,
                     animationDuration:speed
                 }}
             />
             
             <div
-                className="absolute w-[300%] h-[50%] opacity-70 -top-2.5 left-[-250%] rounded-full animate-star-movemet-top z-0"
+                className="absolute w-[300%] h-[50%] opacity-70 -top-2.5 left-[-250%] rounded-full animate-star-movement-top z-0"
                 style={{
-                    background: `radial-gradient(circle,${color} 0%,transparent 10%),radia-gradient(circle,${color} 10%,transparent 20%),radial-gradient(circle,${color} 20%,transparent 40%)`,
+                    background: `radial-gradient(circle,${color} 0%,transparent 10%),radial-gradient(circle,${color} 10%,transparent 20%),radial-gradient(circle,${color} 20%,transparent 40%)`,
                     animationDuration:speed
                 }}
             />
 
             <div
-                className="relative z-10 bg-slate-900 border border-slate-800 text-white text-center rouded-[20px]"
+                className="relative z-10 bg-slate-900 border border-slate-800 text-white text-center rounded-[20px]"
                 style={{
                     padding: '12px 24px',
                     borderWidth:`${thickness}px`
