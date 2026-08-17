@@ -101,4 +101,89 @@ export default function DecryptedText({
 
         return new Set(arr);
     },[])
+
+    const encryptInstantly = useCallback(() => {
+        const emptySet = new Set<number>();
+        setRevealedIndices(emptySet)
+        setDisplayText(shuffleText(text, emptySet))
+        setIsDecrypted(false)
+    }, [text, shuffleText])
+    
+    const triggerDecrypt = useCallback(() => {
+        if (sequential) {
+            orderRef.current = computeOrder(text.length)
+            pointerRef.current = 0;
+            setRevealedIndices(new Set());
+        } else {
+            setRevealedIndices(new Set());
+        }
+
+        setDirection('forward')
+        setIsAnimating(true)
+    }, [sequential, computeOrder, text.length])
+    
+    const triggerReverse = useCallback(() => {
+        if (sequential) {
+            orderRef.current = computeOrder(text.length).slice().reverse()
+        pointerRef.current = 0;
+        setRevealedIndices(fillAllIndices());
+        setDisplayText(shuffleText(text,fillAllIndices()))
+        } else {
+            setRevealedIndices(fillAllIndices())
+            setDisplayText(shuffleText(text,fillAllIndices()))
+        }
+
+        setDirection('reverse')
+        setIsAnimating(true)
+    }, [sequential, computeOrder, fillAllIndices, shuffleText, text])
+    
+    useEffect(() => {
+        if (!isAnimating) return;
+
+        let currentIteration = 0;
+
+        const getNextIndex = (revealedSet: Set<number>): number => {
+            const textLength = text.length;
+            switch (revealDirection) {
+                case 'start':
+                    return revealedSet.size;
+                
+                case 'end':
+                    return textLength - 1 - revealedSet.size;
+                
+                case 'center': {
+                    const middle = Math.floor(textLength / 2);
+                    const offset = Math.floor(revealedSet.size / 2);
+                    const nextIndex = revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
+
+                    if(nextIndex>=0 && nextIndex<textLength && !revealedSet.has(nextIndex)){
+                        return nextIndex;
+                    }
+
+                    for (let i = 0; i < textLength; i++){
+                        if (!revealedSet.has(i)) return i;
+                    }
+
+                    return 0;
+                }
+                    
+                default:
+                    return revealedSet.size;
+            }
+        }
+
+
+        intervalRef.current = setInterval(() => {
+            setRevealedIndices(preRevealed => {
+                if (sequential) {
+                    if (direction === 'forward') {
+                        if (preRevealed.size < text.length) {
+                            const nextIndex = getNextIndex(preRevealed);
+                            const newRevealed = new Set(preRevealed);
+                        }
+                    }
+                }
+            })
+        })
+    })
 }
