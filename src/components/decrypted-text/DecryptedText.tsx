@@ -180,10 +180,197 @@ export default function DecryptedText({
                         if (preRevealed.size < text.length) {
                             const nextIndex = getNextIndex(preRevealed);
                             const newRevealed = new Set(preRevealed);
+                            newRevealed.add(nextIndex)
+                            setDisplayText(shuffleText(text, newRevealed))
+                            return newRevealed
+                        } else {
+                            clearInterval(intervalRef.current ?? undefined)
+                            setIsAnimating(false)
+                            setIsDecrypted(true)
+                            return preRevealed
                         }
                     }
+
+                    if (direction == 'reverse') {
+                        if (pointerRef.current < orderRef.current.length) {
+                            const idxToRemove = orderRef.current[pointerRef.current++]
+                            const newRevealed = new Set(preRevealed)
+                            newRevealed.delete(idxToRemove)
+                            setDisplayText(shuffleText(text, newRevealed))
+                            if (newRevealed.size == 0) {
+                                clearInterval(intervalRef.current ?? undefined)
+                                setIsAnimating(false)
+                                setIsDecrypted(false)
+                            }
+
+                            return newRevealed
+                        } else {
+                            clearInterval(intervalRef.current ?? undefined)
+                            setIsAnimating(false)
+                            setIsDecrypted(false)
+                            return preRevealed
+                        }
+                    }
+                } else {
+                    if (direction === 'forward') {
+                        setDisplayText(shuffleText(text, preRevealed))
+                        currentIteration++;
+                        if (currentIteration >= maxIterations) {
+                            clearInterval(intervalRef.current ?? undefined)
+                            setIsAnimating(false)
+                            setDisplayText(text)
+                            setIsDecrypted(true)
+                        }
+                        return preRevealed
+                    }
+
+                    if (direction === 'reverse') {
+                        let currentSet = preRevealed;
+                        if (currentSet.size === 0) {
+                            currentSet=fillAllIndices()
+                        }
+
+                        const removeCount = Math.max(1, Math.ceil(text.length / Math.max(1, maxIterations)))
+                        const nextSet = removeRandomIndices(currentSet, removeCount)
+                        setDisplayText(shuffleText(text, nextSet))
+                        currentIteration++;
+                        if (nextSet.size == 0 || currentIteration >= maxIterations) {
+                            clearInterval(intervalRef.current ?? undefined)
+                            setIsAnimating(false)
+                            setIsDecrypted(false)
+                            setDisplayText(shuffleText(text, new Set()))
+                            return new Set()
+                        }
+                        return nextSet;
+                    }
+                }
+                return preRevealed;
+            })
+        }, speed)
+        return ()=>clearInterval(intervalRef.current ?? undefined)
+    }, [
+        isAnimating,
+        text,
+        speed,
+        maxIterations,
+        sequential,
+        revealDirection,
+        shuffleText,
+        direction,
+        fillAllIndices,
+        removeRandomIndices,
+        characters,
+        useOriginalCharsOnly
+    ])
+
+    const handleClick = () => {
+        if (animateOn !== 'click') return;
+
+        if (clickMode === 'once') {
+            if (isDecrypted) return;
+            setDirection('forward')
+            triggerDecrypt()
+        }
+
+        if (clickMode === 'toggle') {
+            if (isDecrypted) {
+                triggerReverse();
+            } else {
+                setDirection('forward')
+                triggerDecrypt();
+            }
+        }
+    }
+
+    const triggerHoverDecrypt = useCallback(() => {
+        if (isAnimating) return;
+
+        setRevealedIndices(new Set())
+        setIsDecrypted(false)
+        setDisplayText(text)
+        setDirection('forward')
+        setIsAnimating(true)
+    }, [isAnimating, text])
+    
+    const resetToPlainText = useCallback(() => {
+        clearInterval(intervalRef.current ?? undefined)
+        setIsAnimating(false)
+        setRevealedIndices(new Set())
+        setDisplayText(text)
+        setIsDecrypted(true)
+        setDirection('forward')
+    }, [text])
+    
+    useEffect(() => {
+        if (animateOn !== 'view' && animateOn !== 'inViewHover') return;
+
+        const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !hasAnimated) {
+                    triggerDecrypt()
+                    setHasAnimated(true)
                 }
             })
-        })
-    })
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold:0.1
+        }
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions)
+        const currentRef = containerRef.current;
+        if (currentRef) {
+            observer.observe(currentRef)
+        }
+
+        return () => {
+            if(currentRef) observer.unobserve(currentRef)
+        }
+    }, [animateOn, hasAnimated, triggerDecrypt])
+    
+    useEffect(() => {
+        if (animateOn === 'click') {
+            encryptInstantly();
+        } else {
+            setDisplayText(text)
+            setIsDecrypted(true);
+        }
+
+        setRevealedIndices(new Set())
+        setDirection('forward')
+    },[animateOn,text,encryptInstantly])
+
+    const animateProps =
+        animateOn === 'hover' || animateOn === 'inViewHover'
+            ? {
+                onMouseEnter: triggerHoverDecrypt,
+                onMouseLeave:resetToPlainText
+            }
+            : animateOn === 'click'
+                ? {
+                    onClick:handleClick
+                }
+                : {}
+    
+    return <motion.span
+        ref={containerRef}
+        className={`inline-block whitespace-pre-wrap ${parentClassName}`}
+        {...animateProps}
+        {...props}
+    >
+        <span className="sr-only">{displayText}</span>
+        <span aria-hidden='true'>
+            {displayText.split('').map((char, index) => {
+                const isRevealedOrDone = revealedIndices.has(index) || (!isAnimating && isDecrypted)
+                
+                return (
+                    <span key={index} className={isRevealedOrDone ? clasName : encryptedClassName}>
+                        {char}
+                    </span>
+                )
+            })}
+        </span>
+    </motion.span>
 }
