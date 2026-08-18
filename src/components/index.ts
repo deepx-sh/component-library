@@ -7,3 +7,6 @@ export * from './tilted-card/tilted-card.types.ts'
 
 export { default as StarBorder } from './star-border/StarBorder.tsx'
 export *from './star-border/star-border.types.ts'
+
+export { default as DecryptedText } from './decrypted-text/DecryptedText.tsx'
+export *from './decrypted-text/decrypted-text.types.ts'
