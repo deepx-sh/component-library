@@ -1,4 +1,4 @@
-import { Stack, TiltedCard ,StarBorder} from "./components";
+import { Stack, TiltedCard ,StarBorder,DecryptedText} from "./components";
 
 
 
@@ -46,6 +46,14 @@ const App = () => {
                       </StarBorder>
                   </div>
               </section>
+                <hr />
+              <section className="flex flex-col items-center gap-4">
+                  <h2 className="text-xl font-semibold">Decrypted Text</h2>
+                  <div className="flex flex-col gap-4">
+                      <DecryptedText text="Hello, World!" speed={100} />
+                      <DecryptedText text="React is awesome!" speed={50} />
+                  </div>
+                </section>
           </div>
     </main>
   )
