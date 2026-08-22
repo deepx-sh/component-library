@@ -1,6 +1,6 @@
 import { useEffect, useState,useRef } from "react";
 import type { TrueFocusProps, FocusRect } from "./true-focus.types";
-
+import {motion} from 'motion/react'
 export default function TrueFocus({
     sentence = 'React Typescript',
     separator = ' ',
@@ -59,4 +59,58 @@ export default function TrueFocus({
             setCurrentIndex(lastActiveIndex);
         }
     }
+
+    return (
+        <div className="relative flex gap-4 justify-center items-center flex-wrap"
+            ref={containerRef}
+            style={{outline:'none',userSelect:'none'}}
+        >
+            {words.map((word, index) => {
+                const isActive = index === currentIndex;
+                return (
+                    <span
+                        key={index}
+                        ref={el => {
+                            wordRefs.current[index] = el;
+                        }}
+
+                        className="relative text-[3rem] font-black cursor-pointer"
+                        style={{
+                            filter: manualMode
+                                ? isActive
+                                    ? `blur(0px)`
+                                    : `blur(${blurAmout}px)`
+                                : isActive
+                                    ? `blur(0px)`
+                                    : `blur(${blurAmout}px)`,
+                            transition: `filter ${animationDuration}s ease`,
+                            outline: 'none',
+                            userSelect:'none'
+                        } as React.CSSProperties
+                        }
+
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={handleMouseLeave}
+                    >
+                        {word}
+                    </span>
+                )
+            })}
+
+            <motion.div
+                className="absolute top-0 left-0 pointer-events-none box-border border-0"
+                animate={{
+                    x: focusRect.x,
+                    y: focusRect.y,
+                    width: focusRect.width,
+                    height: focusRect.height,
+                    opacity:currentIndex>=0?1:0
+                }}
+                transition={{
+                    duration: animationDuration
+                    
+                }}
+            ></motion.div>
+        </div>
+    )
 }
