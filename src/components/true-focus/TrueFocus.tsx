@@ -56,7 +56,7 @@ export default function TrueFocus({
 
     const handleMouseLeave = () => {
         if (manualMode) {
-            setCurrentIndex(lastActiveIndex);
+            setCurrentIndex(lastActiveIndex!);
         }
     }
 
@@ -108,9 +108,35 @@ export default function TrueFocus({
                 }}
                 transition={{
                     duration: animationDuration
-                    
                 }}
-            ></motion.div>
+                style={{
+                    '--border-color': borderColor,
+                    '--glow-color':glowColor
+                } as React.CSSProperties}
+            >
+                <span
+                    className="absolute w-4 h-4 border-[3px] rounded-[3px] -top-2.5 -right-2.5 border-l-0 border-b-0"
+                    style={{
+                        borderColor: 'var(--border-color)',
+                        filter:'drop-shadow(0 0 4px var(--border-color))'
+                    }}
+                ></span>
+                <span
+                    className="absolute w-4 h-4 border-[3px] rounded-[3px] -bottom-2.5 -left-2.5 border-r-0 border-t-0"
+                    style={{
+                        borderColor: 'var(--border-color)',
+                        filter:'drop-shadow(0 0 4px var(--border-color))'
+                    }}
+                ></span>
+
+                <span
+                    className="absolute w-4 h-4 border-[3px] rouded-[3px] -bottom-2.5  -right-2.5 border-l-0 border-t-0"
+                    style={{
+                        borderColor: 'var(--border-color)',
+                        filter:'drop-shadow(0 0 4px var(--border-color))'
+                    }}
+                ></span>
+            </motion.div>
         </div>
     )
 }
