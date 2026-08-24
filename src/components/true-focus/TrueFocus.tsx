@@ -115,6 +115,13 @@ export default function TrueFocus({
                 } as React.CSSProperties}
             >
                 <span
+                    className="absolute w-4 h-4 border-[3px] rounded-[3px] -top-2.5 -left-2.5 border-r-0 border-b-0"
+                    style={{
+                        borderColor: 'var(--border-color)',
+                        filter:'drop-shadow(0 0 4px var(--border-color))'
+                    }}
+                ></span>
+                <span
                     className="absolute w-4 h-4 border-[3px] rounded-[3px] -top-2.5 -right-2.5 border-l-0 border-b-0"
                     style={{
                         borderColor: 'var(--border-color)',
