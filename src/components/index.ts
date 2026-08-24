@@ -10,3 +10,6 @@ export *from './star-border/star-border.types.ts'
 
 export { default as DecryptedText } from './decrypted-text/DecryptedText.tsx'
 export *from './decrypted-text/decrypted-text.types.ts'
+
+export { default as TrueFocus } from './true-focus/TrueFocus.tsx'
+export *from './true-focus/TrueFocus.tsx'
