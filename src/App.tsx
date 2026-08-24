@@ -1,4 +1,4 @@
-import { Stack, TiltedCard ,StarBorder,DecryptedText} from "./components";
+import { Stack, TiltedCard ,StarBorder,DecryptedText,TrueFocus} from "./components";
 
 
 
@@ -53,7 +53,15 @@ const App = () => {
                       <DecryptedText text="Hello, World!" speed={100} />
                       <DecryptedText text="React is awesome!" speed={50} />
                   </div>
-                </section>
+              </section>
+              
+              <section className=" flex flex-col items-center gap-4">
+                  <h2 className="text-xl font-semibold">Focus</h2>
+
+                  <div className="flex flex-col gap-4">
+                      <TrueFocus sentence="React TypeScript" manualMode={true} blurAmout={5} borderColor="#5227FF" animationDuration={0.5} pauseBetweenAnimations={1} />
+                  </div>
+              </section>
           </div>
     </main>
   )
