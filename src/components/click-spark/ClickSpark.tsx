@@ -106,10 +106,37 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
         ctx.stroke();
         return true
       })
+      animationId = requestAnimationFrame(draw);
     }
-  })
+    animationId = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(animationId);
+    }
+  }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale])
+  
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const now = performance.now()
+    const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
+      x,
+      y,
+      angle: (2 * Math.PI * i) / sparkCount,
+      startTime:now
+    }))
+
+    sparksRef.current.push(...newSparks)
+  }
   return (
-    <div>ClickSpark</div>
+    <div className='relative w-full h-full' onClick={handleClick}>
+      <canvas ref={canvasRef} className='absolute inset-0 pointer-events-none' />
+      {children}
+    </div>
   )
 }
 
