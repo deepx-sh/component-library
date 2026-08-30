@@ -7,7 +7,7 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     sparkRadius = 15,
     sparkCount = 8,
     duration = 400,
-    easing = 'ease-in',
+    easing = 'ease-out',
     extraScale = 1.0,
     children
 }) => {
